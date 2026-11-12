@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>GramaShiksha - Digital Learning Platform</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- MOBILE APP HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="app-logo">📖</div>
+      <div>
+        <h1 class="app-title">GramaShiksha</h1>
+        <p class="app-subtitle" id="txtSubtitle">Offline Rural Learning Hub</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <button id="btnLangToggle" class="btn-lang" title="Switch Language">
+        🌐 <span id="lblLang">ಕನ್ನಡ</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- OFFLINE STATUS PILL -->
+  <div class="offline-bar">
+    <span class="status-dot"></span>
+    <span id="txtOfflineBanner">Offline Mode Active • Zero Internet Required</span>
+  </div>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="app-container">
+
+    <!-- 1. REGISTRATION SCREEN (Mascot Login) -->
+    <section id="viewRegister" class="card fade-in">
+      <div class="text-center">
+        <div class="badge-icon">🦁</div>
+        <h2 class="card-heading" id="regHeading">Student Login</h2>
+        <p class="card-desc" id="regDesc">Enter your name and pick your favorite animal avatar to start learning!</p>
+      </div>
+
+      <form id="formRegister" class="form-group">
+        <label for="inputName" class="input-label" id="lblInputName">Student Full Name</label>
+        <input type="text" id="inputName" class="input-field" placeholder="e.g. Deepa V Desai" required>
+
+        <label for="inputUsn" class="input-label" id="lblInputUsn">Roll No / USN</label>
+        <input type="text" id="inputUsn" class="input-field" placeholder="e.g. 2TG25CS014" required>
+
+        <label class="input-label" id="lblChooseAvatar">Select Animal Avatar</label>
+        <div class="avatar-grid">
+          <label class="avatar-card selected">
+            <input type="radio" name="mascot" value="Lion" checked>
+            <span class="avatar-emoji">🦁</span>
+            <span class="avatar-name">Simha (Lion)</span>
+          </label>
+          <label class="avatar-card">
+            <input type="radio" name="mascot" value="Elephant">
+            <span class="avatar-emoji">🐘</span>
+            <span class="avatar-name">Aane (Elephant)</span>
+          </label>
+          <label class="avatar-card">
+            <input type="radio" name="mascot" value="Peacock">
+            <span class="avatar-emoji">🦚</span>
+            <span class="avatar-name">Navilu (Peacock)</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btnStartLearning">
+          🚀 Start Learning
+        </button>
+      </form>
+    </section>
+
+    <!-- 2. STUDENT LEARNING DASHBOARD -->
+    <section id="viewDashboard" class="hidden fade-in">
+      
+      <!-- Student Profile Card -->
+      <div class="student-profile-card">
+        <div class="profile-left">
+          <div class="profile-avatar" id="dispAvatar">🦁</div>
+          <div>
+            <h3 class="profile-name" id="dispName">Deepa V Desai</h3>
+            <p class="profile-usn" id="dispUsn">USN: 2TG25CS014</p>
+            <span class="rank-badge" id="dispBadge">Beginner</span>
+          </div>
+        </div>
+        <div class="profile-right">
+          <div class="stars-counter">
+            <span class="stars-label" id="lblStars">Stars</span>
+            <span class="stars-value" id="dispStars">0 ⭐</span>
+          </div>
+          <button id="btnLogout" class="btn-logout" title="Logout">🚪</button>
+        </div>
+      </div>
+
+      <!-- Activity Modules Grid -->
+      <h3 class="section-title" id="lblModulesTitle">Learning Activities (ABL)</h3>
+
+      <div class="modules-grid">
+        <div class="module-card math" id="cardMath">
+          <div class="module-icon">🔢</div>
+          <h4 class="module-title" id="txtMathTitle">Math Activity</h4>
+          <p class="module-desc" id="txtMathDesc">Fruit counting & multiplication puzzles</p>
+          <button class="btn btn-sm btn-math" id="btnOpenMath">Start Math Quiz</button>
+        </div>
+
+        <div class="module-card science" id="cardSci">
+          <div class="module-icon">🌱</div>
+          <h4 class="module-title" id="txtSciTitle">General Science</h4>
+          <p class="module-desc" id="txtSciDesc">Sunlight, plants & clean water trivia</p>
+          <button class="btn btn-sm btn-sci" id="btnOpenSci">Start Science Quiz</button>
+        </div>
+
+        <div class="module-card lang" id="cardLang">
+          <div class="module-icon">📖</div>
+          <h4 class="module-title" id="txtLangTitle">Language Arts</h4>
+          <p class="module-desc" id="txtLangDesc">Kannada to English word matching</p>
+          <button class="btn btn-sm btn-lang-mod" id="btnOpenLang">Start Word Match</button>
+        </div>
+      </div>
+
+      <!-- Offline Save Action -->
+      <div class="offline-save-box">
+        <div>
+          <h4 class="offline-title" id="txtSaveTitle">Offline Storage</h4>
+          <p class="offline-desc" id="txtSaveDesc">Saves your score locally to device storage.</p>
+        </div>
+              <button id="btnSaveOffline" class="btn btn-dark">💾 Save Offline</button>
+      </div>
+
+    </section>
+
+    <!-- 3. TEACHER & CCE REPORT VIEW -->
+    <section id="viewTeacher" class="hidden fade-in">
+      <div class="card">
+        <div class="teacher-header">
+          <div>
+            <h3 class="card-heading">Teacher Analytics (CCE)</h3>
+            <p class="card-desc">Classroom performance and weak point analytics</p>
+          </div>
+          <button id="btnDownloadCsv" class="btn btn-sm btn-primary">📥 Export CSV</button>
+        </div>
+
+        <div class="table-container">
+          <table class="roster-table">
+            <thead>
+              <tr>
+                <th>USN</th>
+                <th>Name</th>
+                <th>Mascot</th>
+                <th>Score</th>
+                <th>Stars</th>
+                <th>Badge</th>
+              </tr>
+            </thead>
+            <tbody id="tableRosterBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: INTERACTIVE QUIZ DIALOGUE -->
+  <div id="quizModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalQuizTitle">Numeracy Quiz</h3>
+        <button id="btnCloseModal" class="btn-close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="question-box">
+          <p class="question-text" id="q1Text">
+            Q1: An orchard has 8 mango trees and 7 coconut trees. What is the total count? (8 + 7 = ?)
+          </p>
+          <div class="answer-row">
+            <input type="number" id="ansQ1" class="input-field input-sm" placeholder="Answer">
+            <span id="feedbackQ1" class="feedback-text"></span>
+          </div>
+        </div>
+
+        <div class="question-box">
+          <p class="question-text" id="q2Text">
+            Q2: A classroom has 6 desks with 4 students at each desk. Total students? (6 x 4 = ?)
+          </p>
+          <div class="answer-row">
+            <input type="number" id="ansQ2" class="input-field input-sm" placeholder="Answer">
+            <span id="feedbackQ2" class="feedback-text"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btnCancelModal" class="btn btn-secondary">Close</button>
+        <button id="btnSubmitQuiz" class="btn btn-primary">Submit Answers</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast">Action completed!</div>
+
+  <!-- BOTTOM MOBILE NAVIGATION BAR -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="tabStudent">
+      <span class="nav-icon">🎒</span>
+      <span class="nav-label" id="txtNavStudent">Student</span>
+    </button>
+    <button class="nav-item" id="tabTeacher">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label" id="txtNavTeacher">Teacher</span>
+    </button>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+</html>
+  
