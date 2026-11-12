@@ -1,5 +1,6 @@
 let currentStudent = null;
 let isKannada = false;
+let activeSubject = "math";
 
 let studentRoster = [
   { usn: "2TG25CS014", name: "Deepa V Desai", mascot: "Lion", score: 20, stars: 20, badge: "Silver Star" },
@@ -31,9 +32,6 @@ const dictionary = {
     btnLang: "Start Word Match",
     saveTitle: "Offline Storage",
     saveDesc: "Saves your score locally to device storage.",
-    modalTitle: "Numeracy Quiz",
-    q1: "Q1: An orchard has 8 mango trees and 7 coconut trees. What is the total count? (8 + 7 = ?)",
-    q2: "Q2: A classroom has 6 desks with 4 students at each desk. Total students? (6 x 4 = ?)",
     navStudent: "Student",
     navTeacher: "Teacher"
   },
@@ -59,27 +57,63 @@ const dictionary = {
     btnLang: "ಪದಗಳ ಒಗಟು",
     saveTitle: "ಆಫ್‌ಲೈನ್ ಶೇಖರಣೆ",
     saveDesc: "ದಾಖಲೆಗಳನ್ನು ನೇರವಾಗಿ ಫೋನ್/ಟ್ಯಾಬ್ಲೆಟ್‌ನಲ್ಲಿ ಉಳಿಸುತ್ತದೆ.",
-    modalTitle: "ಗಣಿತ ಚಟುವಟಿಕೆ ರಸಪ್ರಶ್ನೆ",
-    q1: "ಪ್ರಶ್ನೆ 1: ಒಂದು ತೋಟದಲ್ಲಿ 8 ಮಾವಿನ ಮರ ಮತ್ತು 7 ತೆಂಗಿನ ಮರಗಳಿವೆ. ಒಟ್ಟು ಮರಗಳು ಎಷ್ಟು? (8 + 7 = ?)",
-    q2: "ಪ್ರಶ್ನೆ 2: ಒಂದು ಕೊಠಡಿಯಲ್ಲಿ 6 ಬೆಂಚುಗಳಿವೆ. ಪ್ರತಿ ಬೆಂಚಿನಲ್ಲಿ 4 ಮಕ್ಕಳಿದ್ದಾರೆ. ಒಟ್ಟು ಮಕ್ಕಳು ಎಷ್ಟು? (6 x 4 = ?)",
     navStudent: "ವಿದ್ಯಾರ್ಥಿ",
     navTeacher: "ಶಿಕ್ಷಕರು"
   }
 };
 
-const mascotMap = {
-  "Lion": "🦁",
-  "Elephant": "🐘",
-  "Peacock": "🦚"
+const quizzes = {
+  math: {
+    EN: {
+      title: "Numeracy Quiz",
+      q1: "Q1: An orchard has 8 mango trees and 7 coconut trees. Total trees? (8 + 7 = ?)",
+      q2: "Q2: A classroom has 6 desks with 4 students at each desk. Total students? (6 x 4 = ?)"
+    },
+    KN: {
+      title: "ಗಣಿತ ಚಟುವಟಿಕೆ ರಸಪ್ರಶ್ನೆ",
+      q1: "ಪ್ರಶ್ನೆ 1: ಒಂದು ತೋಟದಲ್ಲಿ 8 ಮಾವಿನ ಮರ ಮತ್ತು 7 ತೆಂಗಿನ ಮರಗಳಿವೆ. ಒಟ್ಟು ಮರಗಳು ಎಷ್ಟು? (8 + 7 = ?)",
+      q2: "ಪ್ರಶ್ನೆ 2: ಒಂದು ಕೊಠಡಿಯಲ್ಲಿ 6 ಬೆಂಚುಗಳಿವೆ. ಪ್ರತಿ ಬೆಂಚಿನಲ್ಲಿ 4 ಮಕ್ಕಳಿದ್ದಾರೆ. ಒಟ್ಟು ಮಕ್ಕಳು ಎಷ್ಟು? (6 x 4 = ?)"
+    },
+    a1: 15,
+    a2: 24
+  },
+  sci: {
+    EN: {
+      title: "General Science Quiz (Enter 1, 2, or 3)",
+      q1: "Q1: How do green plants make food using sunlight? (1) Respiration  (2) Photosynthesis  (3) Evaporation",
+      q2: "Q2: Which gas do humans breathe in to survive? (1) Oxygen  (2) Carbon Dioxide  (3) Nitrogen"
+    },
+    KN: {
+      title: "ಪರಿಸರ ವಿಜ್ಞಾನ ರಸಪ್ರಶ್ನೆ (1, 2 ಅಥವಾ 3 ಬರೆಯಿರಿ)",
+      q1: "ಪ್ರಶ್ನೆ 1: ಸಸ್ಯಗಳು ಸೂರ್ಯನ ಬೆಳಕಿನಿಂದ ಆಹಾರ ತಯಾರಿಸುವ ಕ್ರಿಯೆ? (1) ಉಸಿರಾಟ  (2) ದ್ಯುತಿಸಂಶ್ಲೇಷಣೆ  (3) ಬಾಷ್ಪೀಕರಣ",
+      q2: "ಪ್ರಶ್ನೆ 2: ನಾವು ಜೀವಿಸಲು ಉಸಿರಾಡುವ ಅನಿಲ ಯಾವುದು? (1) ಆಮ್ಲಜನಕ  (2) ಇಂಗಾಲದ ಡೈಆಕ್ಸೈಡ್  (3) ನೈಟ್ರೋಜನ್"
+    },
+    a1: 2,
+    a2: 1
+  },
+  lang: {
+    EN: {
+      title: "Language Arts Quiz (Enter 1, 2, or 3)",
+      q1: "Q1: What is the English word for 'ಶಾಲೆ' (Shaale)? (1) House  (2) School  (3) Playground",
+      q2: "Q2: What is the opposite of 'BIG' (ದೊಡ್ಡದು)? (1) Tall  (2) Small  (3) Heavy"
+    },
+    KN: {
+      title: "ಭಾಷಾ ಕೌಶಲ್ಯ ರಸಪ್ರಶ್ನೆ (1, 2 ಅಥವಾ 3 ಬರೆಯಿರಿ)",
+      q1: "ಪ್ರಶ್ನೆ 1: 'ಶಾಲೆ' ಪದದ ಇಂಗ್ಲಿಷ್ ಅರ್ಥವೇನು? (1) House  (2) School  (3) Playground",
+      q2: "ಪ್ರಶ್ನೆ 2: 'ದೊಡ್ಡದು' (BIG) ಪದದ ವಿರುದ್ಧ ಪದ ಯಾವುದು? (1) Tall  (2) Small (ಚಿಕ್ಕದು)  (3) Heavy"
+    },
+    a1: 2,
+    a2: 2
+  }
 };
+
+const mascotMap = { "Lion": "🦁", "Elephant": "🐘", "Peacock": "🦚" };
 
 function showToast(message) {
   const toast = document.getElementById("toast");
   toast.innerText = message;
   toast.classList.add("show");
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2600);
+  setTimeout(() => toast.classList.remove("show"), 2600);
 }
 
 function updateLanguage() {
@@ -93,27 +127,18 @@ function updateLanguage() {
   document.getElementById("lblInputUsn").innerText = text.lblUsn;
   document.getElementById("lblChooseAvatar").innerText = text.lblAvatar;
   document.getElementById("btnStartLearning").innerText = text.btnStart;
-
   document.getElementById("lblModulesTitle").innerText = text.lblModules;
   document.getElementById("txtMathTitle").innerText = text.mathTitle;
   document.getElementById("txtMathDesc").innerText = text.mathDesc;
   document.getElementById("btnOpenMath").innerText = text.btnMath;
-
   document.getElementById("txtSciTitle").innerText = text.sciTitle;
   document.getElementById("txtSciDesc").innerText = text.sciDesc;
   document.getElementById("btnOpenSci").innerText = text.btnSci;
-
   document.getElementById("txtLangTitle").innerText = text.langTitle;
   document.getElementById("txtLangDesc").innerText = text.langDesc;
   document.getElementById("btnOpenLang").innerText = text.btnLang;
-
   document.getElementById("txtSaveTitle").innerText = text.saveTitle;
   document.getElementById("txtSaveDesc").innerText = text.saveDesc;
-
-  document.getElementById("modalQuizTitle").innerText = text.modalTitle;
-  document.getElementById("q1Text").innerText = text.q1;
-  document.getElementById("q2Text").innerText = text.q2;
-
   document.getElementById("txtNavStudent").innerText = text.navStudent;
   document.getElementById("txtNavTeacher").innerText = text.navTeacher;
 }
@@ -143,30 +168,22 @@ formRegister.addEventListener("submit", (e) => {
   if (existing) {
     currentStudent = existing;
   } else {
-    currentStudent = {
-      usn: usn,
-      name: name,
-      mascot: mascot,
-      score: 0,
-      stars: 0,
-      badge: "Beginner"
-    };
+    currentStudent = { usn, name, mascot, score: 0, stars: 0, badge: "Beginner" };
     studentRoster.push(currentStudent);
   }
 
   document.getElementById("viewRegister").classList.add("hidden");
   document.getElementById("viewDashboard").classList.remove("hidden");
-
   updateStudentDashboard();
-  showToast(`Welcome ${name}!`);
+  showToast("Welcome " + name + "!");
 });
 
 function updateStudentDashboard() {
   if (!currentStudent) return;
   document.getElementById("dispName").innerText = currentStudent.name;
-  document.getElementById("dispUsn").innerText = `USN: ${currentStudent.usn}`;
+  document.getElementById("dispUsn").innerText = "USN: " + currentStudent.usn;
   document.getElementById("dispAvatar").innerText = mascotMap[currentStudent.mascot] || "🦁";
-  document.getElementById("dispStars").innerText = `${currentStudent.stars} ⭐`;
+  document.getElementById("dispStars").innerText = currentStudent.stars + " ⭐";
   document.getElementById("dispBadge").innerText = currentStudent.badge;
 }
 
@@ -179,17 +196,20 @@ document.getElementById("btnLogout").addEventListener("click", () => {
 });
 
 const quizModal = document.getElementById("quizModal");
-const btnOpenMath = document.getElementById("btnOpenMath");
-const btnCloseModal = document.getElementById("btnCloseModal");
-const btnCancelModal = document.getElementById("btnCancelModal");
-const btnSubmitQuiz = document.getElementById("btnSubmitQuiz");
-
 const ansQ1 = document.getElementById("ansQ1");
 const ansQ2 = document.getElementById("ansQ2");
 const feedbackQ1 = document.getElementById("feedbackQ1");
 const feedbackQ2 = document.getElementById("feedbackQ2");
 
-function openModal() {
+function openSubjectQuiz(subject) {
+  activeSubject = subject;
+  const qData = quizzes[subject];
+  const langKey = isKannada ? "KN" : "EN";
+
+  document.getElementById("modalQuizTitle").innerText = qData[langKey].title;
+  document.getElementById("q1Text").innerText = qData[langKey].q1;
+  document.getElementById("q2Text").innerText = qData[langKey].q2;
+
   ansQ1.value = "";
   ansQ2.value = "";
   feedbackQ1.innerText = "";
@@ -201,46 +221,34 @@ function closeModal() {
   quizModal.classList.add("hidden");
 }
 
-btnOpenMath.addEventListener("click", openModal);
-btnCloseModal.addEventListener("click", closeModal);
-btnCancelModal.addEventListener("click", closeModal);
+document.getElementById("btnOpenMath").addEventListener("click", () => openSubjectQuiz("math"));
+document.getElementById("btnOpenSci").addEventListener("click", () => openSubjectQuiz("sci"));
+document.getElementById("btnOpenLang").addEventListener("click", () => openSubjectQuiz("lang"));
+document.getElementById("btnCloseModal").addEventListener("click", closeModal);
+document.getElementById("btnCancelModal").addEventListener("click", closeModal);
 
-document.getElementById("btnOpenSci").addEventListener("click", () => {
-  if (!currentStudent) return;
-  currentStudent.stars += 10;
-  calculateBadge();
-  updateStudentDashboard();
-  showToast("Science Quiz finished! +10 Stars ⭐");
-});
-
-document.getElementById("btnOpenLang").addEventListener("click", () => {
-  if (!currentStudent) return;
-  currentStudent.stars += 10;
-  calculateBadge();
-  updateStudentDashboard();
-  showToast("Word puzzle completed! +10 Stars ⭐");
-});
-
-btnSubmitQuiz.addEventListener("click", () => {
+document.getElementById("btnSubmitQuiz").addEventListener("click", () => {
   const a1 = parseInt(ansQ1.value);
   const a2 = parseInt(ansQ2.value);
-
+  const correct1 = quizzes[activeSubject].a1;
+  const correct2 = quizzes[activeSubject].a2;
   let earned = 0;
-  if (a1 === 15) {
+
+  if (a1 === correct1) {
     feedbackQ1.innerText = "✓ Correct! (+10)";
     feedbackQ1.style.color = "#059669";
     earned += 10;
   } else {
-    feedbackQ1.innerText = "✗ Answer is 15";
+    feedbackQ1.innerText = "✗ Answer is " + correct1;
     feedbackQ1.style.color = "#e11d48";
   }
 
-  if (a2 === 24) {
+  if (a2 === correct2) {
     feedbackQ2.innerText = "✓ Correct! (+10)";
     feedbackQ2.style.color = "#059669";
     earned += 10;
   } else {
-    feedbackQ2.innerText = "✗ Answer is 24";
+    feedbackQ2.innerText = "✗ Answer is " + correct2;
     feedbackQ2.style.color = "#e11d48";
   }
 
@@ -251,7 +259,7 @@ btnSubmitQuiz.addEventListener("click", () => {
     updateStudentDashboard();
   }
 
-  showToast(`Quiz completed! +${earned} Stars ⭐`);
+  showToast("Quiz completed! +" + earned + " Stars ⭐");
   setTimeout(closeModal, 1400);
 });
 
@@ -278,11 +286,8 @@ tabStudent.addEventListener("click", () => {
   tabStudent.classList.add("active");
   tabTeacher.classList.remove("active");
   viewTeacher.classList.add("hidden");
-  if (currentStudent) {
-    viewDashboard.classList.remove("hidden");
-  } else {
-    viewRegister.classList.remove("hidden");
-  }
+  if (currentStudent) viewDashboard.classList.remove("hidden");
+  else viewRegister.classList.remove("hidden");
 });
 
 tabTeacher.addEventListener("click", () => {
@@ -325,3 +330,4 @@ document.getElementById("btnDownloadCsv").addEventListener("click", () => {
 });
 
 updateLanguage();
+             
