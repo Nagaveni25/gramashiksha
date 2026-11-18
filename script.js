@@ -353,3 +353,7 @@ document.getElementById("btnDownloadCsv").addEventListener("click", () => {
 
 // Initialize
 updateLanguage();
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+
